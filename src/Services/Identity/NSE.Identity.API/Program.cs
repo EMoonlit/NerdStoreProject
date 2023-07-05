@@ -1,9 +1,19 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NSE.Identity.API.Data;
+using NSE.Identity.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// AppSettings config
+var appSettingsSection = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppSettings>(appSettingsSection);
+
+var appSettings = appSettingsSection.Get<AppSettings>();
 
 // Add services to the container.
 
@@ -16,6 +26,27 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+// Add JWT Config
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(bearerOptions =>
+{
+    bearerOptions.RequireHttpsMetadata = true;
+    bearerOptions.SaveToken = true;
+    bearerOptions.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.Secret)),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = appSettings.Audience,
+        ValidIssuer = appSettings.Issuer
+    };
+});
+
 
 // Add mapped controllers
 builder.Services.AddControllers();
