@@ -1,3 +1,4 @@
+using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Services;
 
 namespace NSE.WebApp.MVC.Config;
@@ -19,5 +20,9 @@ public static class DependencyInjectionConfig
 
                 return handler;
             });
+
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        services.AddScoped<IUser, AspNetUser>();
     }
 }
