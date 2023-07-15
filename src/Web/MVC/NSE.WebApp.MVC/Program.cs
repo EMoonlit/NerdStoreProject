@@ -9,8 +9,18 @@ builder.Services.AddAuthConfiguration();
 // Add services to the container.
 builder.Services.AddWebAppConfiguration();
 
+// Add Injection Services
+builder.Services.RegisterServices(builder.Environment);
+
 var app = builder.Build();
 
+app.UseCors(c =>
+{
+    c.AllowAnyHeader();
+    c.AllowAnyMethod();
+    c.AllowAnyOrigin();
+});
+app.UseHttpsRedirection();
 app.UseWebAppConfiguration(app.Environment);
 
 app.MapControllerRoute(
