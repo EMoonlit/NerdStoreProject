@@ -35,8 +35,9 @@ public class AuthController : Controller
         
         // if error return View(userRegister);
         
-        // Login success -> return RedirectToAction("Index", "controllerName")
-        
+        // Active Login
+        await ActiveLogin(response);
+
         return RedirectToAction("Index", "Home");
     }
 
@@ -60,8 +61,7 @@ public class AuthController : Controller
         
         // Active Login in App
         await ActiveLogin(response);
-        // Login success -> return RedirectToAction("Index", "controllerName")
-        
+
         return RedirectToAction("Index", "Home");
     }
 
@@ -77,8 +77,7 @@ public class AuthController : Controller
     {
         var token = FormatToken(userLoginResponse.AccessToken);
 
-        var claims = new List<Claim>();
-        claims.Add(new Claim("JWT", userLoginResponse.AccessToken));
+        var claims = new List<Claim> { new("JWT", userLoginResponse.AccessToken) };
         claims.AddRange(token.Claims);
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -97,6 +96,6 @@ public class AuthController : Controller
 
     private static JwtSecurityToken FormatToken(string jwtToken)
     {
-        return new JwtSecurityTokenHandler().ReadJwtToken(jwtToken) as JwtSecurityToken;
+        return new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
     }
 }
