@@ -23,9 +23,12 @@ public class AuthService : IAuthService
         
         var response = await _httpClient.PostAsync("https://localhost:7016/api/identity/auth", loginContent);
 
-        var test = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
         
-        return JsonSerializer.Deserialize<UserLoginResponse>(await response.Content.ReadAsStringAsync());
+        return JsonSerializer.Deserialize<UserLoginResponse>(await response.Content.ReadAsStringAsync(), options);
     }
 
     public async Task<UserLoginResponse> Register(UserRegister userRegister)
@@ -37,9 +40,12 @@ public class AuthService : IAuthService
         );
         
         var response = await _httpClient.PostAsync("https://localhost:7016/api/identity/new-account", userContent);
-
-        var content = await response.Content.ReadAsStringAsync();
         
-        return JsonSerializer.Deserialize<UserLoginResponse>(await response.Content.ReadAsStringAsync());
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+        
+        return JsonSerializer.Deserialize<UserLoginResponse>(await response.Content.ReadAsStringAsync(), options);
     }
 }
