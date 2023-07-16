@@ -4,7 +4,7 @@ using NSE.WebApp.MVC.Models;
 
 namespace NSE.WebApp.MVC.Services;
 
-public class AuthService : IAuthService
+public class AuthService : Validation, IAuthService
 {
     private readonly HttpClient _httpClient;
 
@@ -28,6 +28,15 @@ public class AuthService : IAuthService
             PropertyNameCaseInsensitive = true,
         };
         
+        if (!ValidateErrorResponse(response))
+        {
+            return new UserLoginResponse
+            {
+                ErrorResponse =
+                    JsonSerializer.Deserialize<ErrorResponse>(await response.Content.ReadAsStringAsync(), options)
+            };
+        }
+
         return JsonSerializer.Deserialize<UserLoginResponse>(await response.Content.ReadAsStringAsync(), options);
     }
 
@@ -45,6 +54,15 @@ public class AuthService : IAuthService
         {
             PropertyNameCaseInsensitive = true,
         };
+        
+        if (!ValidateErrorResponse(response))
+        {
+            return new UserLoginResponse
+            {
+                ErrorResponse =
+                    JsonSerializer.Deserialize<ErrorResponse>(await response.Content.ReadAsStringAsync(), options)
+            };
+        }
         
         return JsonSerializer.Deserialize<UserLoginResponse>(await response.Content.ReadAsStringAsync(), options);
     }

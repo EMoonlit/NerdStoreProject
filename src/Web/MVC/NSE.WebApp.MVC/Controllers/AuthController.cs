@@ -8,7 +8,7 @@ using NSE.WebApp.MVC.Services;
 
 namespace NSE.WebApp.MVC.Controllers;
 
-public class AuthController : Controller
+public class AuthController : MainController
 {
     private readonly IAuthService _authService;
 
@@ -33,7 +33,7 @@ public class AuthController : Controller
         // Send User to Identity API
         var response = await _authService.Register(userRegister);
         
-        // if error return View(userRegister);
+        if (IsResponseError(response.ErrorResponse)) return View(userRegister);
         
         // Active Login
         await ActiveLogin(response);
@@ -57,7 +57,7 @@ public class AuthController : Controller
         // Send User to Identity API
         var response = await _authService.Login(userLogin);
         
-        // if error return View(userLogin);
+        if (IsResponseError(response.ErrorResponse)) return View(userLogin);
         
         // Active Login in App
         await ActiveLogin(response);
@@ -69,7 +69,7 @@ public class AuthController : Controller
     [Route("exit")]
     public async Task<IActionResult> Logout()
     {
-        // success -> return RedirectToAction("Index", "controllerName")
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("Index", "Home");
     }
 

@@ -6,3 +6,15 @@ public class ErrorViewModel
 
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }
+
+public class ErrorResponse
+{
+    public string Title { get; set; }
+    public int Status { get; set; }
+    public ResponseErrorMessages Errors { get; set; }
+}
+
+public class ResponseErrorMessages
+{
+    public IList<string> Messages { get; set; }
+}
