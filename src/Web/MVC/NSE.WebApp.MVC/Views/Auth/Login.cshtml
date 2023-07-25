@@ -1,7 +1,7 @@
 @model NSE.WebApp.MVC.Models.UserLogin
 
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Log in";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,7 +9,7 @@
     <div class="col-md-12">
         <section>
             <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <h4>Welcome</h4>
+                <h4>welcome</h4>
                 <hr />
                 
                 <vc:Summary></vc:Summary>
@@ -26,11 +26,6 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Enter</button>
-                </div>
-                <div class="form-group">
-                    <p>
-                        <a asp-action="Register" asp-controller="Auth">Create a account</a>
-                    </p>
                 </div>
             </form>
         </section>

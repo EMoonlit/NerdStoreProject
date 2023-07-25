@@ -38,39 +38,43 @@ public class AuthController : MainController
         // Active Login
         await ActiveLogin(response);
 
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Home");;
     }
 
     [HttpGet]
     [Route("login")]
-    public IActionResult Login()
+    public IActionResult Login(string? returnUrl = null)
     {
+        ViewData["ReturnUrl"] = returnUrl ?? Url.Content("~/");;
         return View();
     }
     
     [HttpPost]
     [Route("login")]
-    public async Task<IActionResult> Login(UserLogin userLogin)
+    public async Task<IActionResult> Login(UserLogin userLogin, string? returnUrl = null)
     {
+        ViewData["ReturnUrl"] = returnUrl ?? Url.Content("~/");
         if (!ModelState.IsValid) return View(userLogin);
-        
-        // Send User to Identity API
+
         var response = await _authService.Login(userLogin);
-        
+
         if (IsResponseError(response.ErrorResponse)) return View(userLogin);
-        
-        // Active Login in App
+
         await ActiveLogin(response);
 
-        return RedirectToAction("Index", "Home");
+        if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
+
+        return LocalRedirect(returnUrl);
+        
     }
+
 
     [HttpGet]
     [Route("exit")]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Home");;
     }
 
     private async Task ActiveLogin(UserLoginResponse userLoginResponse)
@@ -96,6 +100,6 @@ public class AuthController : MainController
 
     private static JwtSecurityToken FormatToken(string jwtToken)
     {
-        return new JwtSecurityTokenHandler().ReadJwtToken(jwtToken);
+        return new JwtSecurityTokenHandler().ReadJwtToken(jwtToken) as JwtSecurityToken;
     }
 }

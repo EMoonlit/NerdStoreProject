@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthConfiguration();
 
 // Add services to the container.
-builder.Services.AddWebAppConfiguration();
+builder.Services.AddWebAppConfiguration(builder.Configuration);
 
 // Add Injection Services
 builder.Services.RegisterServices(builder.Environment);

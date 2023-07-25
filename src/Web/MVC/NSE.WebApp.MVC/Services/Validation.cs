@@ -1,9 +1,28 @@
+using System.Text;
+using System.Text.Json;
 using NSE.WebApp.MVC.Extensions;
 
 namespace NSE.WebApp.MVC.Services;
 
 public abstract class Validation
 {
+    protected StringContent GetContent(object data)
+    {
+        return new StringContent(
+            JsonSerializer.Serialize(data),
+            Encoding.UTF8,
+            "Application/Json");
+    }
+
+    protected async Task<T> DeserializeResponseObjectAsync<T>(HttpResponseMessage responseMessage)
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+        return JsonSerializer.Deserialize<T>(await responseMessage.Content.ReadAsStringAsync(), options);
+    }
+    
     protected bool ValidateErrorResponse(HttpResponseMessage response)
     {
         switch ((int)response.StatusCode)

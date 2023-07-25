@@ -10,7 +10,7 @@ public static class AuthConfig
             .AddCookie(options =>
             {
                 options.LoginPath = "/login";
-                options.AccessDeniedPath = "/access-denied";
+                options.AccessDeniedPath = "/error/403";
             });
     }
 

@@ -20,12 +20,12 @@ public class AspNetUser : IUser
 
     public string GetUserEmail()
     {
-        return IsUserAuthenticated() ? _contextAccessor.HttpContext.User.GetUserEmail() : string.Empty;
+        return IsUserAuthenticated() ? _contextAccessor.HttpContext.User.GetUserEmail() : "";
     }
 
     public string GetUserToken()
     {
-        return IsUserAuthenticated() ? _contextAccessor.HttpContext.User.GetUserToken() : string.Empty;
+        return IsUserAuthenticated() ? _contextAccessor.HttpContext.User.GetUserToken() : "";
     }
 
     public bool IsUserAuthenticated()
@@ -47,4 +47,6 @@ public class AspNetUser : IUser
     {
         return _contextAccessor.HttpContext;
     }
+    
+    
 }
