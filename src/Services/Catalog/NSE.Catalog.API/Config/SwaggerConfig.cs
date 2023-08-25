@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 
-namespace NSE.Identity.API.Config;
+namespace NSE.Catalog.API.Config;
 
 public static class SwaggerConfig
 {
@@ -16,6 +16,31 @@ public static class SwaggerConfig
                 Title = "NerdStore Enterprise Catalog API",
                 Description = "This API is part of the ASP.NET Core Enterprise Applications course",
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT")}
+            });
+            
+            config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "Enter you token like this: Bearer {your token}",
+                Name = "Authorization",
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey
+            });
+            
+            config.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] {}
+                }
             });
         });
 

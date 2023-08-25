@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NSE.Catalog.API.Data;
+using NSE.WebAPI.Core.Identity;
 
 namespace NSE.Identity.API.Config;
 
@@ -32,8 +33,11 @@ public static class ApiConfig
         }
 
         app.UseHttpsRedirection();
+        
         app.UseRouting();
+        
         app.UseCors("Total");
         
+        app.UseAuthConfiguration();
     }
 }

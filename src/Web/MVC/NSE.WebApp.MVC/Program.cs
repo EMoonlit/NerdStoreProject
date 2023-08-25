@@ -10,7 +10,7 @@ builder.Services.AddAuthConfiguration();
 builder.Services.AddWebAppConfiguration(builder.Configuration);
 
 // Add Injection Services
-builder.Services.RegisterServices(builder.Environment);
+builder.Services.RegisterServices(builder.Environment, builder.Configuration);
 
 var app = builder.Build();
 

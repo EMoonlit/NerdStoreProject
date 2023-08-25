@@ -1,12 +1,13 @@
-using Microsoft.EntityFrameworkCore;
-using NSE.Catalog.API.Data;
-using NSE.Catalog.API.Data.Repository;
-using NSE.Catalog.API.Models;
+using NSE.Catalog.API.Config;
 using NSE.Identity.API.Config;
+using NSE.WebAPI.Core.Identity;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApiConfiguration(builder.Configuration);
+
+builder.Services.AddAuthConfiguration(builder.Configuration);
 
 builder.Services.RegisterServices();
 

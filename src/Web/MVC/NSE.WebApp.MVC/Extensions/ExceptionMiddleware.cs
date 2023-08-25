@@ -1,4 +1,5 @@
 using System.Net;
+using Polly.CircuitBreaker;
 
 namespace NSE.WebApp.MVC.Extensions;
 
@@ -19,19 +20,28 @@ public class ExceptionMiddleware
         }
         catch (CustomHttpRequestException ex)
         {
-            HandleRequestExceptionAsync(httpContext, ex);
+            HandleRequestExceptionAsync(httpContext, ex.StatusCode);
+        }
+        catch (BrokenCircuitException)
+        {
+            HandleCircuitBreakerExceptionAsync(httpContext);
         }
     }
 
     private static void HandleRequestExceptionAsync(HttpContext context,
-        CustomHttpRequestException httpRequestException)
+        HttpStatusCode statusCode)
     {
-        if (httpRequestException.StatusCode == HttpStatusCode.Unauthorized)
+        if (statusCode == HttpStatusCode.Unauthorized)
         {
             context.Response.Redirect($"/login?ReturnUrl={context.Request.Path}");
             return;
         }
 
-        context.Response.StatusCode = (int)httpRequestException.StatusCode;
+        context.Response.StatusCode = (int)statusCode;
+    }
+    
+    private static void HandleCircuitBreakerExceptionAsync(HttpContext context)
+    {
+          context.Response.Redirect($"/system-temporarily-unavailable");
     }
 }
