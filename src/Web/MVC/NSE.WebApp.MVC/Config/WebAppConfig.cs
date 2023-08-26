@@ -1,3 +1,5 @@
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 using NSE.Identity.API.Extensions;
 using NSE.WebApp.MVC.Extensions;
 
@@ -38,6 +40,14 @@ public static class WebAppConfig
         app.UseRouting();
 
         app.UseAuthConfiguration();
+
+        var supportedCultures = new[] { new CultureInfo("pt-BR") };
+        app.UseRequestLocalization(new RequestLocalizationOptions
+        {
+            DefaultRequestCulture = new RequestCulture("pt-BR"),
+            SupportedCultures = supportedCultures,
+            SupportedUICultures = supportedCultures
+        });
 
         app.UseMiddleware<ExceptionMiddleware>();
     }

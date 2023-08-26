@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NSE.Catalog.API.Data;
 using NSE.WebAPI.Core.Identity;
 
-namespace NSE.Identity.API.Config;
+namespace NSE.Catalog.API.Config;
 
 public static class ApiConfig
 {

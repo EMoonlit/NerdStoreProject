@@ -2,7 +2,7 @@ using NSE.Catalog.API.Data;
 using NSE.Catalog.API.Data.Repository;
 using NSE.Catalog.API.Models;
 
-namespace NSE.Identity.API.Config;
+namespace NSE.Catalog.API.Config;
 
 public static class DependencyInjectionConfig
 {

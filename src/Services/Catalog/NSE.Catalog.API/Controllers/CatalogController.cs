@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSE.Catalog.API.Models;
+using NSE.WebAPI.Core.Controllers;
 using NSE.WebAPI.Core.Identity;
 
 namespace NSE.Catalog.API.Controllers;
 
-[ApiController]
 [Authorize]
-public class CatalogController : Controller
+public class CatalogController : MainController
 {
     private readonly IProductRepository _productRepository;
     
@@ -27,9 +27,6 @@ public class CatalogController : Controller
     [HttpGet("catalog/products/{id}")]
     public async Task<Product> ProductDetail(Guid id)
     {
-        throw new Exception("Error");
         return await _productRepository.GetByIdAsync(id);
     }
-    
-    
 }

@@ -9,6 +9,11 @@
 
     <ItemGroup>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.19" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.19" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.19" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.19" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.19" />
     </ItemGroup>
 
     <ItemGroup>
@@ -16,5 +21,20 @@
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\Core\NSE.Core\NSE.Core.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\Services\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj" />
+    </ItemGroup>
+
+
+
+
+
+    <ItemGroup>
+      <Folder Include="Application\Queries\" />
+    </ItemGroup>
+
 
 </Project>

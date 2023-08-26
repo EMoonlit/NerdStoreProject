@@ -21,4 +21,8 @@
 
 
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\Core\NSE.Core\NSE.Core.csproj" />
+    </ItemGroup>
+
 </Project>

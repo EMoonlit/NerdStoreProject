@@ -1,6 +1,8 @@
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using NSE.Catalog.API.Models;
 using NSE.Core.Data;
+using NSE.Core.Messages;
 
 namespace NSE.Catalog.API.Data;
 
@@ -13,6 +15,10 @@ public class CatalogContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Ignore Events
+        modelBuilder.Ignore<Event>();
+        modelBuilder.Ignore<ValidationResult>();
+        
         // only for set a default varchar to 100
         foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                      e => e.GetProperties().Where(

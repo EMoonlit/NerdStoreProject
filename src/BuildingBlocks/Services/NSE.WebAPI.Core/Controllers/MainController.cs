@@ -1,7 +1,8 @@
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace NSE.Identity.API.Controllers;
+namespace NSE.WebAPI.Core.Controllers;
 
 [ApiController]
 public abstract class MainController : Controller
@@ -32,6 +33,17 @@ public abstract class MainController : Controller
 
         return CustomResponse();
     }
+    
+    protected ActionResult CustomResponse(ValidationResult modelState)
+    {
+        foreach (var error in modelState.Errors)
+        {
+            AddProcessError(error.ErrorMessage);
+        }
+
+        return CustomResponse();
+    }
+
 
     protected bool IsValidOperation()
     {

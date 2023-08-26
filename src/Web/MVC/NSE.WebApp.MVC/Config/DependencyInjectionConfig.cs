@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Services;
 using NSE.WebApp.MVC.Services.Handlers;
@@ -9,6 +10,8 @@ public static class DependencyInjectionConfig
 {
     public static void RegisterServices(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
     {
+        services.AddSingleton<IValidationAttributeAdapterProvider, CpfValidationAttributeAdapterProvider>();
+        
         services.AddTransient<HttpClientAuthDelegatingHandler>();
         
         services.AddHttpClient<IAuthService, AuthService>()

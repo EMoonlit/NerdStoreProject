@@ -1,9 +1,20 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using NSE.WebApp.MVC.Extensions;
 
 namespace NSE.WebApp.MVC.Models;
 
 public class UserRegister
 {
+    [Required(ErrorMessage = "The field {0} is required")]
+    [DisplayName("Full Name")]
+    public string FullName { get; set; }
+    
+    [Required(ErrorMessage = "The field {0} is required")]
+    [DisplayName("CPF")]
+    [Cpf]
+    public string Cpf { get; set; }
+    
     [Required(ErrorMessage = "The field {0} is required")]
     [EmailAddress(ErrorMessage = "Field {0} is in invalid format")]
     public string Email { get; set; }
@@ -13,6 +24,7 @@ public class UserRegister
     public string Password { get; set; }
     
     [Compare("Password", ErrorMessage = "Passwords don't match")]
+    [DisplayName("Confirm Password")]
     public string ConfirmationPassword { get; set; }
 }
 

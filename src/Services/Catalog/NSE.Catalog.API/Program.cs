@@ -1,5 +1,4 @@
 using NSE.Catalog.API.Config;
-using NSE.Identity.API.Config;
 using NSE.WebAPI.Core.Identity;
 
 
