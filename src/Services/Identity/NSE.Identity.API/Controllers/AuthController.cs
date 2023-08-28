@@ -1,11 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using EasyNetQ;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-
+using NSE.Core.Messages.Integration;
 using NSE.Identity.API.Models;
 using NSE.WebAPI.Core.Controllers;
 using NSE.WebAPI.Core.Identity;
@@ -19,6 +20,8 @@ public class AuthController : MainController
     private readonly UserManager<IdentityUser> _userManager;
     private readonly AppSettings _appSettings;
 
+    private IBus _bus;
+
     public AuthController(
         SignInManager<IdentityUser> signInManager, 
         UserManager<IdentityUser> userManager,
@@ -26,6 +29,7 @@ public class AuthController : MainController
     {
         _signInManager = signInManager;
         _userManager = userManager;
+
         _appSettings = appSettings.Value;
     }
     
@@ -44,13 +48,35 @@ public class AuthController : MainController
         var result = await _userManager.CreateAsync(user, userRegister.Password);
         
         // await _signInManager.SignInAsync(user, false);
-        if (result.Succeeded) return CustomResponse(await GenerateJwtAsync(userRegister.Email));
+        if (result.Succeeded)
+        {
+            var response = await RegisterCustomer(userRegister);
+            
+            return CustomResponse(await GenerateJwtAsync(userRegister.Email));
+        }
         
         foreach (var error in result.Errors)
         {
             AddProcessError(error.Description);
         }
         return CustomResponse();
+    }
+
+    private async Task<ResponseMessage> RegisterCustomer(UserRegister userRegister)
+    {
+        var user = await _userManager.FindByEmailAsync(userRegister.Email);
+        var userRegistered = new UserRegisteredIntegrationEvent(
+            Guid.Parse(user.Id),
+            userRegister.FullName,
+            userRegister.Email,
+            userRegister.Cpf
+        );
+
+        _bus = RabbitHutch.CreateBus("host=localhost");
+
+        var result = await _bus.Rpc.RequestAsync<UserRegisteredIntegrationEvent, ResponseMessage>(
+            userRegistered);
+        return result;
     }
 
     [HttpPost("auth")]

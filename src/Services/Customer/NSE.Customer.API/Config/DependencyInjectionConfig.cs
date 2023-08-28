@@ -6,6 +6,7 @@ using NSE.Customer.API.Application.Events;
 using NSE.Customer.API.Data;
 using NSE.Customer.API.Data.Repository;
 using NSE.Customer.API.Models;
+using NSE.Customer.API.Services;
 
 namespace NSE.Customer.API.Config;
 
@@ -20,5 +21,7 @@ public static class DependencyInjectionConfig
 
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<CustomerContext>();
+
+        services.AddHostedService<RegisterCustomerIntegrationHandler>();
     }
 }
