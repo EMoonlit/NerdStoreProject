@@ -21,7 +21,6 @@ public static class DependencyInjectionConfig
 
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<CustomerContext>();
-
-        services.AddHostedService<RegisterCustomerIntegrationHandler>();
+        
     }
 }

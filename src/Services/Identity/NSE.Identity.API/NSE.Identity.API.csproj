@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="EasyNetQ" Version="6.5.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.19" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.19" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.19" />
@@ -36,6 +35,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\Core\NSE.Core\NSE.Core.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\MessageBus\NSE.MessageBus\NSE.MessageBus.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\Services\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj" />
     </ItemGroup>
 

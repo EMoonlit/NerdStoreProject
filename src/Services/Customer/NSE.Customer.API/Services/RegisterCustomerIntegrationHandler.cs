@@ -1,35 +1,33 @@
-using EasyNetQ;
 using FluentValidation.Results;
 using NSE.Core.Mediator;
 using NSE.Core.Messages.Integration;
 using NSE.Customer.API.Application.Commands;
+using NSE.MessageBus;
 
 namespace NSE.Customer.API.Services;
 
 public class RegisterCustomerIntegrationHandler : BackgroundService
 {
-    private IBus _bus;
+    private readonly IMessageBus _bus;
     private readonly IServiceProvider _serviceProvider;
 
-    public RegisterCustomerIntegrationHandler(IServiceProvider serviceProvider)
+    public RegisterCustomerIntegrationHandler(IServiceProvider serviceProvider, IMessageBus bus)
     {
         _serviceProvider = serviceProvider;
+        _bus = bus;
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _bus = RabbitHutch.CreateBus("host=localhost:5672");
-
-        _bus.Rpc.RespondAsync<UserRegisteredIntegrationEvent, ResponseMessage>(
-            async request => new ResponseMessage(
+        _bus.RespondAsync<UserRegisteredIntegrationEvent, ResponseMessage>(
+            async request => 
                     await RegisterCustomer(request)
-                )
             );
 
         return Task.CompletedTask;
     }
 
-    private async Task<ValidationResult> RegisterCustomer(UserRegisteredIntegrationEvent message)
+    private async Task<ResponseMessage> RegisterCustomer(UserRegisteredIntegrationEvent message)
     {
         var customerCommand = new RegisterCustomerCommand(message.Id, message.Name, message.Email, message.Cpf);
 
@@ -42,6 +40,6 @@ public class RegisterCustomerIntegrationHandler : BackgroundService
             success = await mediator.SendCommand(customerCommand);
         }
 
-        return success;
+        return new ResponseMessage(success);
     }
 }
