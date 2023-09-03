@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace NSE.ShoppingCart.API.Models;
 
 public class ShoppingCartItem
@@ -16,4 +18,50 @@ public class ShoppingCartItem
     public Guid ShoppingCartId { get; set; }
     
     public ShoppingCartCustomer ShoppingCartCustomer { get; set; }
+
+    internal void AssociateWithTheShoppingCart(Guid shoppingCartId)
+    {
+        ShoppingCartId = shoppingCartId;
+    }
+
+    internal decimal CalculateTheTotalValueOfAnItemInTheCart()
+    {
+        return Quantity * Value;
+    }
+
+    internal void AddUnits(int units)
+    {
+        Quantity += units;
+    }
+
+    internal bool IsValid()
+    {
+        return new ShoppingCartItemValidation().Validate(this).IsValid;
+    }
+}
+
+public class ShoppingCartItemValidation : AbstractValidator<ShoppingCartItem>
+{
+    public ShoppingCartItemValidation()
+    {
+        RuleFor(c => c.ProductId)
+            .NotEqual(Guid.Empty)
+            .WithMessage("Invalid product Id");
+
+        RuleFor(c => c.Name)
+            .NotEmpty()
+            .WithMessage("Invalid name of product");
+
+        RuleFor(c => c.Quantity)
+            .GreaterThan(0)
+            .WithMessage("The minimum quantity for an item is 1");
+
+        RuleFor(c => c.Quantity)
+            .LessThan(100)
+            .WithMessage("he maximum quantity for an item is 100");
+
+        RuleFor(c => c.Value)
+            .GreaterThan(0)
+            .WithMessage("The value of an item must be greater than 0");
+    }
 }

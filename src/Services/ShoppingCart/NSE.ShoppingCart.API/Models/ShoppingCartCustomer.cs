@@ -14,4 +14,41 @@ public class ShoppingCartCustomer
     }
     
     public ShoppingCartCustomer() { }
+
+    internal void CalculateTheTotalValueOfTheShoppingCart()
+    {
+        TotalValue = Items.Sum(p => p.CalculateTheTotalValueOfAnItemInTheCart());
+    }
+
+    internal bool DoesTheItemAlreadyExistInTheCart(ShoppingCartItem item)
+    {
+        return Items.Any(p => p.ProductId == item.ProductId);
+    }
+
+    internal ShoppingCartItem GetByProductId(Guid productId)
+    {
+        return Items.FirstOrDefault(p => p.ProductId == productId)!;
+    }
+    internal void AddItem(ShoppingCartItem item)
+    {
+        // Validate item is ok!
+        // TODO: throw errors
+        if (!item.IsValid()) return;
+        
+        // Associate
+        item.AssociateWithTheShoppingCart(Id);
+
+        if (DoesTheItemAlreadyExistInTheCart(item))
+        {
+            var existingItem = GetByProductId(item.ProductId);
+            existingItem.AddUnits(item.Quantity);
+
+            item = existingItem;
+            Items.Remove(existingItem);
+        }
+        
+        Items.Add(item);
+
+        CalculateTheTotalValueOfTheShoppingCart();
+    }
 }
