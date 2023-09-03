@@ -1,13 +1,14 @@
 using System.Net.Http.Headers;
+using NSE.WebAPI.Core.User;
 using NSE.WebApp.MVC.Extensions;
 
 namespace NSE.WebApp.MVC.Services.Handlers;
 
 public class HttpClientAuthDelegatingHandler : DelegatingHandler
 {
-    private readonly IUser _user;
+    private readonly IAspNetUser _user;
 
-    public HttpClientAuthDelegatingHandler(IUser user)
+    public HttpClientAuthDelegatingHandler(IAspNetUser user)
     {
         _user = user;
     }
