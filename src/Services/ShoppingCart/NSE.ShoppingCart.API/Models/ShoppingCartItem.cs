@@ -31,6 +31,11 @@ public class ShoppingCartItem
 
     internal void AddUnits(int units)
     {
+        Quantity = units;
+    }
+    
+    internal void UpdateUnits(int units)
+    {
         Quantity += units;
     }
 
@@ -54,14 +59,14 @@ public class ShoppingCartItemValidation : AbstractValidator<ShoppingCartItem>
 
         RuleFor(c => c.Quantity)
             .GreaterThan(0)
-            .WithMessage("The minimum quantity for an item is 1");
+            .WithMessage(item => $"The minimum quantity for an item {item.Name} is 1");
 
         RuleFor(c => c.Quantity)
             .LessThan(100)
-            .WithMessage("he maximum quantity for an item is 100");
+            .WithMessage(item => $"he maximum quantity for an item {item.Name} is 100");
 
         RuleFor(c => c.Value)
             .GreaterThan(0)
-            .WithMessage("The value of an item must be greater than 0");
+            .WithMessage(item => $"The value of an item {item.Name} must be greater than 0");
     }
 }

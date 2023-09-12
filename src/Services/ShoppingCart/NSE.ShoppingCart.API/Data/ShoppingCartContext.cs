@@ -1,3 +1,4 @@
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -24,6 +25,8 @@ public class ShoppingCartContext : DbContext
         {
             property.SetColumnType("varchar(100)");
         }
+
+        modelBuilder.Ignore<ValidationResult>();
 
         modelBuilder.Entity<Models.ShoppingCartCustomer>()
             .HasIndex(c => c.CustomerId, "IDX_Customer");
