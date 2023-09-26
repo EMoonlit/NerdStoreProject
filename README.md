@@ -1,4 +1,4 @@
-[# NerdStoreProject
+# NerdStoreProject
 
 ## Status: Em desenvolvimento.
 
