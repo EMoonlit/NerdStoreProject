@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -5,6 +6,7 @@ namespace NSE.ShoppingCart.API.Models;
 
 public class ShoppingCartCustomer
 {
+    internal const int MAX_ITEM_QUANTITY = 5;
     public Guid Id { get; set; }
     public Guid CustomerId { get; set; }
     public decimal TotalValue { get; set; }

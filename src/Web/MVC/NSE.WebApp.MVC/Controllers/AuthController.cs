@@ -33,7 +33,7 @@ public class AuthController : MainController
         // Send User to Identity API
         var response = await _authService.Register(userRegister);
         
-        if (IsResponseError(response.ErrorResponse)) return View(userRegister);
+        if (IsResponseError(response.ResponseResult)) return View(userRegister);
         
         // Active Login
         await ActiveLogin(response);
@@ -58,7 +58,7 @@ public class AuthController : MainController
 
         var response = await _authService.Login(userLogin);
 
-        if (IsResponseError(response.ErrorResponse)) return View(userLogin);
+        if (IsResponseError(response.ResponseResult)) return View(userLogin);
 
         await ActiveLogin(response);
 

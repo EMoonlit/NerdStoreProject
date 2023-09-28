@@ -25,7 +25,7 @@ public class AuthService : Validation, IAuthService
         {
             return new UserLoginResponse
             {
-                ErrorResponse = await DeserializeResponseObjectAsync<ErrorResponse>(response) 
+                ResponseResult = await DeserializeResponseObjectAsync<ResponseResult>(response) 
             };
         }
 
@@ -42,7 +42,7 @@ public class AuthService : Validation, IAuthService
         {
             return new UserLoginResponse
             {
-                ErrorResponse = await DeserializeResponseObjectAsync<ErrorResponse>(response)
+                ResponseResult = await DeserializeResponseObjectAsync<ResponseResult>(response)
             };
         }
         return await DeserializeResponseObjectAsync<UserLoginResponse>(response);

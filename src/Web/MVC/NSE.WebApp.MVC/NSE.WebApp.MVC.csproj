@@ -26,4 +26,10 @@
       <ProjectReference Include="..\..\..\BuildingBlocks\Services\NSE.WebAPI.Core\NSE.WebAPI.Core.csproj" />
     </ItemGroup>
 
+
+
+
+
+
+
 </Project>

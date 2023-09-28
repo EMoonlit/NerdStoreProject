@@ -44,7 +44,7 @@ public class UserLoginResponse
     public string AccessToken { get; set; }
     public double ExpiresIn { get; set; }
     public UserTokenData UserTokenData { get; set; }
-    public ErrorResponse ErrorResponse { get; set; }
+    public ResponseResult ResponseResult { get; set; }
 }
 
 public class UserTokenData

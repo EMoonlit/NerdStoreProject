@@ -40,7 +40,5 @@ public class ShoppingCartContext : DbContext
                      .Model.GetEntityTypes()
                      .SelectMany(e => e.GetForeignKeys())
                 ) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
-        
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ShoppingCartContext).Assembly);
     }
 }

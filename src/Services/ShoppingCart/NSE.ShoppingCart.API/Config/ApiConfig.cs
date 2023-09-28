@@ -2,11 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using NSE.ShoppingCart.API.Data;
 using NSE.WebAPI.Core.Identity;
 
+
 namespace NSE.ShoppingCart.API.Config;
 
 public static class ApiConfig
 {
-    public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ShoppingCartContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -21,8 +22,6 @@ public static class ApiConfig
                     .AllowAnyMethod()
                     .AllowAnyHeader());
         });
-
-        return services;
     }
 
     public static void UseApiConfiguration(this IApplicationBuilder app, IWebHostEnvironment environment)

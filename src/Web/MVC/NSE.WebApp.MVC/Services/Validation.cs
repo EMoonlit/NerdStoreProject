@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using NSE.WebApp.MVC.Extensions;
+using NSE.WebApp.MVC.Models;
 
 namespace NSE.WebApp.MVC.Services;
 
@@ -11,7 +12,7 @@ public abstract class Validation
         return new StringContent(
             JsonSerializer.Serialize(data),
             Encoding.UTF8,
-            "Application/Json");
+            "application/json");
     }
 
     protected async Task<T> DeserializeResponseObjectAsync<T>(HttpResponseMessage responseMessage)
@@ -39,5 +40,10 @@ public abstract class Validation
 
         response.EnsureSuccessStatusCode();
         return true;
+    }
+
+    protected ResponseResult ReturnOk()
+    {
+        return new ResponseResult();
     }
 }

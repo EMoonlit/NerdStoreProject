@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,8 +37,7 @@ public class ShoppingCartController : MainController
             HandleNewShoppingCart(item);
         else
             HandleShoppingCart(shoppingCart, item);
-
-        ValidateShoppingCart(shoppingCart);
+        
         if (!IsValidOperation()) return CustomResponse();
 
         await PersistData();
@@ -88,9 +88,12 @@ public class ShoppingCartController : MainController
 
     private async Task<ShoppingCartCustomer?> GetCustomerCart()
     {
-        return await _context.ShoppingCartCustomer
+        
+        var shoppingCartCustomer = await _context.ShoppingCartCustomer
             .Include(c => c.Items)
             .FirstOrDefaultAsync(c => c.CustomerId == _user.GetUserId());
+
+        return shoppingCartCustomer;
     }
     
     private void HandleNewShoppingCart(ShoppingCartItem item)

@@ -23,7 +23,7 @@ public class CatalogController : MainController
         return await _productRepository.GetAllAsync();
     }
     
-    [ClaimAuthorize("Catalog", "Read")]
+    // [ClaimAuthorize("Catalog", "Read")]
     [HttpGet("catalog/products/{id}")]
     public async Task<Product> ProductDetail(Guid id)
     {

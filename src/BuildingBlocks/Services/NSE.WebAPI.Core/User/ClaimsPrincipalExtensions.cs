@@ -10,9 +10,9 @@ public static class ClaimsPrincipalExtensions
         {
             throw new ArgumentException(nameof(principal));
         }
-
-        var claim = principal.FindFirst("sub");
-        return claim?.Value;
+        
+        var claim = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        return claim;
     }
     
     public static string GetUserEmail(this ClaimsPrincipal principal)

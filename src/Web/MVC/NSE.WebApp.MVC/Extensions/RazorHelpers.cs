@@ -27,4 +27,22 @@ public static class RazorHelpers
     {
         return value > 0 ? string.Format(Thread.CurrentThread.CurrentCulture, "{0:C}", value) : "Gratuido";
     }
+
+    public static string UnitsForProducts(this RazorPage page, int units)
+    {
+        return units > 1 ? $"{units} unidades" : $"{units} unidade";
+    }
+
+    public static string SelectOptionsForQuantity(this RazorPage page, int quantity, int selectedValue = 0)
+    {
+        var sb = new StringBuilder();
+        for (var index = 1; index <= quantity; index += 1)
+        {
+            var selected = "";
+            if (index == selectedValue) selected = "selected";
+            sb.Append($"<option {selected} value='{index}'>{index}</option>");
+        }
+
+        return sb.ToString();
+    }
 }

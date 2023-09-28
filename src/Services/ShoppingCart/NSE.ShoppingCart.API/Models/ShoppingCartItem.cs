@@ -1,10 +1,12 @@
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using FluentValidation;
 
 namespace NSE.ShoppingCart.API.Models;
 
 public class ShoppingCartItem
 {
-    public ShoppingCartItem(Guid id)
+    public ShoppingCartItem()
     {
         Id = Guid.NewGuid();
     }
@@ -17,7 +19,8 @@ public class ShoppingCartItem
     public string Image { get; set; }
     public Guid ShoppingCartId { get; set; }
     
-    public ShoppingCartCustomer ShoppingCartCustomer { get; set; }
+    [JsonIgnore]
+    public ShoppingCartCustomer? ShoppingCartCustomer { get; set; }
 
     internal void AssociateWithTheShoppingCart(Guid shoppingCartId)
     {
@@ -31,12 +34,12 @@ public class ShoppingCartItem
 
     internal void AddUnits(int units)
     {
-        Quantity = units;
+        Quantity += units;
     }
     
     internal void UpdateUnits(int units)
     {
-        Quantity += units;
+        Quantity = units;
     }
 
     internal bool IsValid()
@@ -62,8 +65,8 @@ public class ShoppingCartItemValidation : AbstractValidator<ShoppingCartItem>
             .WithMessage(item => $"The minimum quantity for an item {item.Name} is 1");
 
         RuleFor(c => c.Quantity)
-            .LessThan(100)
-            .WithMessage(item => $"he maximum quantity for an item {item.Name} is 100");
+            .LessThanOrEqualTo(ShoppingCartCustomer.MAX_ITEM_QUANTITY)
+            .WithMessage(item => $"he maximum quantity for an item {item.Name} is {ShoppingCartCustomer.MAX_ITEM_QUANTITY}");
 
         RuleFor(c => c.Value)
             .GreaterThan(0)

@@ -5,7 +5,7 @@ namespace NSE.WebApp.MVC.Controllers;
 
 public class MainController : Controller
 {
-    protected bool IsResponseError(ErrorResponse response)
+    protected bool IsResponseError(ResponseResult response)
     {
         if (response != null && response.Errors.Messages.Any())
         {
@@ -18,5 +18,15 @@ public class MainController : Controller
         }
 
         return false;
+    }
+
+    protected void AddValidationError(string message)
+    {
+        ModelState.AddModelError(String.Empty, message);
+    }
+
+    protected bool IsValidOperation()
+    {
+        return ModelState.ErrorCount == 0;
     }
 }

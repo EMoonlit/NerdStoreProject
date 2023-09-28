@@ -12,6 +12,10 @@ public static class DependencyInjectionConfig
     public static void RegisterServices(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
     {
         services.AddSingleton<IValidationAttributeAdapterProvider, CpfValidationAttributeAdapterProvider>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IAspNetUser, AspNetUser>();
+
+        #region HttpServices
         
         services.AddTransient<HttpClientAuthDelegatingHandler>();
         
@@ -50,8 +54,30 @@ public static class DependencyInjectionConfig
                 return handler;
             });
         
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddHttpClient<IShoppingCartService, ShoppingCartService>()
+            .AddHttpMessageHandler<HttpClientAuthDelegatingHandler>()
+            .AddTransientHttpErrorPolicy(
+                p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(600))
+            )
+            .AddTransientHttpErrorPolicy(
+                p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30))
+            )
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var handler = new HttpClientHandler();
+        
+                if (environment.IsDevelopment())
+                {
+                    handler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+        
+                return handler;
+            });
+        
+    
+        
 
-        services.AddScoped<IAspNetUser, AspNetUser>();
+        #endregion
     }
 }
